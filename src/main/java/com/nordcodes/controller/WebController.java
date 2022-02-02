@@ -1,8 +1,6 @@
 package com.nordcodes.controller;
 
 import java.time.LocalDateTime;
-import java.util.Set;
-
 import javax.validation.Valid;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -17,8 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.nordcodes.entities.Role;
 import com.nordcodes.entities.ShortURL;
 import com.nordcodes.entities.User;
 import com.nordcodes.services.ShortURLService;
@@ -66,27 +62,18 @@ public class WebController {
 		
 		if(URLService.checkURL(shortURL.getLongURL())) {
 			shortURL.setShortURL(localhostURL + URLService.genShortURL(shortURL.getLongURL()));
-			
-			if(user != null) {
-				user.getShortURLs().add(shortURL);
-				userService.updateUser(user);
-				shortURL.setUserId(user.getId());
-			} else {
-				Role role = new Role();
-				role.setName("ROLE_ADMIN");
-				user = userService.findUserByRole(new Set<Role>().add(role));
-				shortURL.setUserId(user.getId());
-			}
-			
 			shortURL.setTransitionCounter(Long.valueOf(0));
 			shortURL.setLifetime(LocalDateTime.now().plusYears(1));
-			
 			logger.log(Level.INFO, "Create new short URL '" + shortURL.toString() + "'");
-			logger.log(Level.INFO, "Updating user's URLs");
-			
-			user.getShortURLs().add(shortURL);
-			userService.updateUser(user);
-			
+			if(user != null) {
+				shortURL.setUserId(user.getId());
+				user.getShortURLs().add(shortURL);
+				userService.updateUser(user);
+				logger.log(Level.INFO, "Add url to URLs of user named " + user.getUsername() + " and update user information in the database");	
+			} else {
+				shortURLService.saveShortURL(shortURL);
+				logger.log(Level.INFO, "Save URL '" + shortURL.toString() + "'");
+			}
 			model.addAttribute("message", shortURL.getShortURL());
 		} else {
 			logger.log(Level.ERROR, "You entered the wrong URL");

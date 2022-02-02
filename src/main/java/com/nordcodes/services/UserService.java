@@ -1,10 +1,7 @@
 package com.nordcodes.services;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.nordcodes.entities.Role;
 import com.nordcodes.entities.User;
 import com.nordcodes.repositories.UserRepository;
 
@@ -51,15 +47,15 @@ public class UserService implements UserDetailsService {
 		return userFromDb.orElse(new User());
 	}
 	
-	public User findUserByRole(Set<Role> roles) {
-		logger.log(Level.INFO, "Looking for a user by role '" + roles.toString() + "'.");
-		User user = userRepository.findByRoles(roles);
+	public User findUserByRole(String role) {
+		logger.log(Level.INFO, "Looking for a user by role '" + role + "'.");
+		User user = userRepository.findByRole(role);
 		if (user == null) {
-			logger.log(Level.ERROR, "User by role '" + roles.toString() + "' not found.");
+			logger.log(Level.ERROR, "User by role '" + role + "' not found.");
 			return null;
 		}
 
-		logger.log(Level.INFO, "User by role '" + roles.toString() + "' found -- " + user.getUsername());
+		logger.log(Level.INFO, "User by role '" + role + "' found -- " + user.getUsername());
 		return user;
 	}
 
@@ -77,7 +73,7 @@ public class UserService implements UserDetailsService {
 			return false;
 		}
 
-		user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+		user.setRoles("ROLE_USER");
 		user.setPassword(encoder().encode(user.getPassword()));
 		userRepository.save(user);
 		logger.log(Level.INFO, "User '" + user.getUsername() + "' data saved.");

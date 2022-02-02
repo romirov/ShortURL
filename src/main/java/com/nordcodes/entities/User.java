@@ -1,18 +1,19 @@
 package com.nordcodes.entities;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
@@ -27,8 +28,7 @@ public class User implements UserDetails{
 	private String password;
 	@Transient
 	private String passwordConfirm;
-	@ManyToMany(fetch = FetchType.EAGER)
-	private Set<Role> roles;
+	private String role;
 	@OneToMany(fetch = FetchType.EAGER)
 	private Set<ShortURL> shortURLs;
 
@@ -74,7 +74,9 @@ public class User implements UserDetails{
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return getRoles();
+		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority(this.role));
+        return authorities;
 	}
 
 	@Override
@@ -94,12 +96,12 @@ public class User implements UserDetails{
 		this.passwordConfirm = passwordConfirm;
 	}
 
-	public Set<Role> getRoles() {
-		return roles;
+	public String getRole() {
+		return role;
 	}
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
+	public void setRoles(String role) {
+		this.role = role;
 	}
 	
 	public Set<ShortURL> getShortURLs() {
