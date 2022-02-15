@@ -1,3 +1,4 @@
+<#assign security=JspTaglibs["http://www.springframework.org/security/tags"]/>
 <#import "/spring.ftl" as spring/>
 <!DOCTYPE html>
 <html>
@@ -12,12 +13,10 @@
 			letter-spacing: 5px;
 		}
 		
-		/* Bordered form */
 		form {
   			border: 3px solid #ccc;
 		}
 
-		/* Full-width inputs */
 		input[type=text], input[type=password] {
 			width: 100%;
 			padding: 12px 20px;
@@ -33,7 +32,6 @@
 			margin-bottom: 25px;
 		}
 
-		/* Set a style for all buttons */
 		button {
 			background-color: #04AA6D;
 			color: white;
@@ -43,12 +41,10 @@
 			width: 30%;
 		}
 
-		/* Add a hover effect for buttons */
 		button:hover {
 			opacity: 0.8;
 		}
 
-		/* Extra style for the cancel button (red) */
 		.cancelbtn {
 			background-color: #f44336;
 			padding: 14px 20px;
@@ -57,12 +53,10 @@
 			width: 30%;
 		}
 
-		/* Add padding to containers */
 		.container {
 			padding: 16px;
 		}
 
-		/* The "Forgot password" text */
 		span.psw {
 			float: right;
 			padding-top: 16px;
@@ -73,8 +67,6 @@
 		}
 	</style>
 	<body>
-	
-		<!-- Navbar (sit on top) -->
 		<div class="w3-top">
 			<div class="w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
 			<a href=<@spring.url '/'/> class="w3-bar-item w3-button">ShortURL</a>
@@ -83,7 +75,6 @@
 			</div>
 		</div>
 		
-		<!-- Page content -->
 		<div class="w3-display-middle1">
 			<div class="w3-center">
 				<form name="userLogIn" action="" method="POST">
@@ -106,7 +97,6 @@
 			</div>
 		</div>
 		
-		<!-- Footer -->
 		<footer class="w3-bottom w3-center w3-light-grey w3-padding-16">
 			<span>Copyright &copy;ShortURL 2022</span>
 		</footer>

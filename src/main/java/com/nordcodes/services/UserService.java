@@ -16,6 +16,12 @@ import org.springframework.stereotype.Service;
 import com.nordcodes.entities.User;
 import com.nordcodes.repositories.UserRepository;
 
+/**
+ * 
+ * @author hanza
+ * Класс, реализующий интерфейс взаимодействия с базой данных для работы с пользователями
+ * 
+ */
 @Service
 public class UserService implements UserDetailsService {
 	@Autowired
@@ -46,57 +52,48 @@ public class UserService implements UserDetailsService {
 		Optional<User> userFromDb = userRepository.findById(userId);
 		return userFromDb.orElse(new User());
 	}
-	
-	public User findUserByRole(String role) {
-		logger.log(Level.INFO, "Looking for a user by role '" + role + "'.");
-		User user = userRepository.findByRole(role);
-		if (user == null) {
-			logger.log(Level.ERROR, "User by role '" + role + "' not found.");
-			return null;
-		}
-
-		logger.log(Level.INFO, "User by role '" + role + "' found -- " + user.getUsername());
-		return user;
-	}
 
 	public List<User> allUsers() {
 		logger.log(Level.INFO, "Looking for all users.");
 		return userRepository.findAll();
 	}
 
-	public boolean saveUser(User user) {
+	public User saveUser(User user) {
 		logger.log(Level.INFO, "Storing user data in the database..");
 		User userFromDB = userRepository.findByUsername(user.getUsername());
 
 		if (userFromDB != null) {
 			logger.log(Level.ERROR, "The same user is worn in the database.");
-			return false;
+			return null;
 		}
 
 		user.setRoles("ROLE_USER");
 		user.setPassword(encoder().encode(user.getPassword()));
-		userRepository.save(user);
+		user = userRepository.save(user);
 		logger.log(Level.INFO, "User '" + user.getUsername() + "' data saved.");
-		return true;
+		return user;
 	}
 	
-	public boolean updateUser(User user) {
-		if(userRepository.save(user) != null) {
+	public User updateUser(User user) {
+		User userFromDBUser = userRepository.save(user);
+		if(userFromDBUser != null) {
 			logger.log(Level.INFO, "User '" + user.getUsername() + "' data updated.");
-			return true;
+			return userFromDBUser;
 		}
 		
 		logger.log(Level.ERROR, "User '" + user.getUsername() + "' data not updated.");
-		return false;
+		return null;
 	}
 
 	public boolean deleteUser(Long userId) {
 		logger.log(Level.INFO, "Removing a user from an ID '" + userId + "'..");
+		
 		if (userRepository.findById(userId).isPresent()) {
 			logger.log(Level.INFO, "User with ID '" + userId + "' deleted.");
 			userRepository.deleteById(userId);
 			return true;
 		}
+		
 		logger.log(Level.ERROR, "User with ID '" + userId + "' not deleted.");
 		return false;
 	}

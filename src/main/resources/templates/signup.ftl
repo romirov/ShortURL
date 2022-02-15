@@ -1,3 +1,4 @@
+<#assign security=JspTaglibs["http://www.springframework.org/security/tags"]/>
 <#import "/spring.ftl" as spring/>
 <!DOCTYPE html>
 <html>
@@ -12,12 +13,10 @@
 			letter-spacing: 5px;
 		}
 		
-		/* Bordered form */
 		form {
   			border: 3px solid #ccc;
 		}
 
-		/* Full-width input fields */
 		input[type=text], input[type=password] {
 			width: 100%;
 			padding: 15px;
@@ -37,7 +36,6 @@
 			margin-bottom: 25px;
 		}
 
-		/* Set a style for all buttons */
 		button {
 			background-color: #04AA6D;
 			color: white;
@@ -51,18 +49,15 @@
 			opacity:1;
 		}
 
-		/* Extra styles for the cancel button */
 		.cancelbtn {
 			padding: 14px 20px;
 			background-color: #f44336;
 		}
 
-		/* Add padding to container elements */
 		.container {
 			padding: 16px;
 		}
 
-		/* Clear floats */
 		.clearfix::after {
 			content: "";
 			clear: both;
@@ -70,18 +65,21 @@
 		}
 	</style>
 	<body>
-		<!-- Navbar (sit on top) -->
 		<div class="w3-top">
 			<div class="w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
 			<a href=<@spring.url '/'/> class="w3-bar-item w3-button">ShortURL</a>
 		</div>
 		
-		<!-- Page content -->
 		<div class="w3-display-middle2">
 			<div class="w3-center">
 				<form name="userSignupForm" action="" method="POST">
 					<div class="container">
 						<h1>Sign Up</h1>
+						<#if errorMessage??>
+							<div style="color:red;font-style:italic;">
+								<h1>${errorMessage}</h1>
+							</div>
+						</#if>
 						<p>Please fill in this form to create an account.</p>
 						<hr>
 
@@ -103,7 +101,6 @@
 			</div>
 		</div>
 		
-		<!-- Footer -->
 		<footer class="w3-bottom w3-center w3-light-grey w3-padding-16">
 			<span>Copyright &copy;ShortURL 2022</span>
 		</footer>

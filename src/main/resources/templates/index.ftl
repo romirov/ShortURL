@@ -27,7 +27,7 @@
 		<div class="w3-top">
 			<div class="w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
 			<a href=<@spring.url '/'/> class="w3-bar-item w3-button">ShortURL</a>
-			<!-- Right-sided navbar links-->
+			
 			<div class="w3-right w3-hide-small">
 				<@security.authorize access="!isAuthenticated()">
 	    			<a href=<@spring.url '/login'/> class="w3-bar-item w3-button">Log in</a>
@@ -53,13 +53,14 @@
 				
 				<#if errorMessage??>
 					<div style="color:red;font-style:italic;">
-						${errorMessage}
+						<h1>${errorMessage}</h1>
 					</div>
 				</#if>
-				
 				<#if message??>
-      				<h2>${message}</h2>
-      			</#if>
+					<div style="color:black;font-style:italic;">
+						<h1>${message}</h1>
+					</div>
+				</#if>
 			</div>
 		</div>
 		

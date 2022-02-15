@@ -1,6 +1,5 @@
 package com.nordcodes.entities;
 
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * 
+ * @author hanza
+ * Класс - объект представляющий короткую ссылки
+ * 
+ */
 @Entity
 @Table(name = "short_urls")
 public class ShortURL {
@@ -23,14 +28,14 @@ public class ShortURL {
 	@NotBlank
 	@Column(name = "long_url")
 	private String longURL;
-	private LocalDateTime lifetime;
+	private String lifetime;
 	@Column(name = "transition_counter")
 	private Long transitionCounter;
 
 	public ShortURL() {
 	}
 	
-	public ShortURL(Long userId, String shortURL, String longURL, LocalDateTime lifetime, Long transitionCounter) {
+	public ShortURL(Long userId, String shortURL, String longURL, String lifetime, Long transitionCounter) {
 		this.userId = userId;
 		this.shortURL = shortURL;
 		this.longURL = longURL;
@@ -70,11 +75,11 @@ public class ShortURL {
 		this.longURL = longURL;
 	}
 	
-	public LocalDateTime getLifetime() {
+	public String getLifetime() {
 		return lifetime;
 	}
 	
-	public void setLifetime(LocalDateTime lifetime) {
+	public void setLifetime(String lifetime) {
 		this.lifetime = lifetime;
 	}
 	

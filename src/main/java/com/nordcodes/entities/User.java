@@ -3,8 +3,8 @@ package com.nordcodes.entities;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +15,13 @@ import javax.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+/**
+ * 
+ * @author hanza
+ * Класс - объект представляющий пользователя
+ *
+ */
 
 @Entity
 @Table(name = "users")
@@ -29,7 +36,7 @@ public class User implements UserDetails{
 	@Transient
 	private String passwordConfirm;
 	private String role;
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<ShortURL> shortURLs;
 
 	public User() {
