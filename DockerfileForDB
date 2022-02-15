@@ -1,0 +1,19 @@
+FROM debian:bullseye
+RUN apt-get update \
+    && apt-get install -y locales postgresql postgresql-client postgresql-contrib \
+    && rm -rf /var/lib/apt/lists/* \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+
+ENV LANG en_US.utf8
+USER postgres
+COPY init.sql /usr/src/
+RUN    /etc/init.d/postgresql start\
+    && psql -f /usr/src/init.sql \
+#    && psql --command "CREATE USER shorturl WITH SUPERUSER PASSWORD 'vs23nZ4eoT3afoaB';" \
+#    && psql --command "CREATE DATABASE shorturldb;" \ 
+#    && psql --command "GRANT ALL PRIVILEGES ON DATABASE shorturldb TO shorturl;" \
+    && /etc/init.d/postgresql stop
+RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/13/main/pg_hba.conf
+RUN echo "listen_addresses='*'" >> /etc/postgresql/13/main/postgresql.conf
+EXPOSE 5432
+CMD ["/usr/lib/postgresql/13/bin/postgres", "-D", "/var/lib/postgresql/13/main", "-c", "config_file=/etc/postgresql/13/main/postgresql.conf"]
